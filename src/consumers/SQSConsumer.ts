@@ -1,12 +1,11 @@
 import { Writable } from 'stream'
 import crypto from 'crypto'
-import SQS from 'aws-sdk/clients/sqs'
+import { SendMessageBatchCommandInput, SQS, SQSServiceException } from '@aws-sdk/client-sqs';
 import DefaultSQSMessage from './../transformers/DefaultSQSMessage'
 import Consumer from './Consumer'
 import { Message, ProgressPage } from './../providers/Provider'
 import Transformer from './../transformers/Transformer'
 import logger from '../utils/logger'
-import { AWSError } from 'aws-sdk/lib/error'
 
 const sqs = new SQS()
 
@@ -43,20 +42,19 @@ export default class SQSConsumer implements Consumer {
 
 		// limit messages that will be sent to SQS in each batch; AWS limits 10 messages per request
 		for (const batch of batches) {
-			const params: SQS.SendMessageBatchRequest = {
+			const params: SendMessageBatchCommandInput = {
 				QueueUrl: this.queueUrl,
 				Entries: [ ...batch ].map(this.messageBuilder.transform)
 			}
-			sqs.sendMessageBatch(params, (error: AWSError, data) => {
+			sqs.sendMessageBatch(params, (error: SQSServiceException, data) => {
 				if (error) {
 					logger.error('Consumer: failed to emit message batch', {
 						'progress': currentProgress,
 						'batch_id': batchId,
 						'message': error.message,
-						'code': error.code,
 						'name': error.name,
-						'request_id': error.requestId,
-						'region': error.region
+						'request_id': error.$metadata.requestId,
+						'region': sqs.config.region
 					})
 					throw new Error(`SQSConsumer failed to process at [progress=${currentProgress}]`)
 				}

@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import SQS from 'aws-sdk/clients/sqs'
+import { SendMessageBatchRequestEntry } from '@aws-sdk/client-sqs';
 import Transformer from './Transformer'
 import { Message, MessageValue } from './../providers/Provider'
 
@@ -102,7 +102,7 @@ function parseMessageValue(messageValue: MessageValue): PaymentEventMessageValue
 }
 
 export default class GovUkPayPaymentEventMessage implements Transformer {
-	transform(message: Message): SQS.SendMessageBatchRequestEntry {
+	transform(message: Message): SendMessageBatchRequestEntry {
 		return {
 			Id: crypto.randomBytes(16).toString('hex'),
 			MessageBody: JSON.stringify(

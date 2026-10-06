@@ -1,4 +1,4 @@
-import SQS from 'aws-sdk/clients/sqs'
+import { SendMessageBatchRequestEntry } from '@aws-sdk/client-sqs';
 export default interface Transformer {
-	transform(message: { [key: string]: string }): SQS.SendMessageBatchRequestEntry;
+	transform(message: { [key: string]: string }): SendMessageBatchRequestEntry;
 }
