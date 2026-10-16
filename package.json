@@ -19,7 +19,8 @@
     "node": "^22.22.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.1396.0",
+    "@aws-sdk/client-s3": "^3.1146.0",
+    "@aws-sdk/client-sqs": "^3.1146.0",
     "winston": "3.9.0"
   },
   "devDependencies": {

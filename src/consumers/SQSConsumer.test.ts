@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // using `esModuleInterop` (import SQS as) causes jest mocks to fail; force compatability with common modules
-import * as SQS from 'aws-sdk/clients/sqs'
+
+import { SQS } from '@aws-sdk/client-sqs';
 
 import { Message, ProgressPage } from '../providers/Provider'
 
@@ -12,7 +13,7 @@ SQSMock.mockImplementation(() => ({ sendMessageBatch }))
 
 import SQSConsumer from './SQSConsumer'
 
-jest.mock('aws-sdk/clients/sqs')
+jest.mock('@aws-sdk/client-sqs')
 
 beforeEach(() => {
 	sendMessageBatch.mockClear()
