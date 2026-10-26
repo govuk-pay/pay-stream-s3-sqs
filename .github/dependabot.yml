@@ -29,7 +29,7 @@ updates:
   ignore:
   - dependency-name: "node"
     versions:
-    - ">= 23"
+    - ">= 25"
   open-pull-requests-limit: 10
   labels:
   - govuk-pay
